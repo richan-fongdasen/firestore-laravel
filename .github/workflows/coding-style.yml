@@ -1,9 +1,11 @@
-name: Fix PHP code style issues
+name: Coding Style
 
 on:
   push:
     paths:
-      - '**.php'
+      - "**.php"
+      - ".github/workflows/coding-style.yml"
+      - "pint.json"
 
 permissions:
   contents: write
