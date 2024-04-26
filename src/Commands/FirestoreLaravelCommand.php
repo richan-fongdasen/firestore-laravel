@@ -1,12 +1,14 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+declare(strict_types=1);
+
+namespace RichanFongdasen\Firestore\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class FirestoreLaravelCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'firestore-laravel';
 
     public $description = 'My command';
 

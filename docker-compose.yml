@@ -1,0 +1,13 @@
+version: "3.6"
+
+services:
+  firestore-emulator:
+    container_name: firestore-emulator
+    restart: unless-stopped
+    image: "richan/firestore-dev:latest"
+    environment:
+      - FIRESTORE_HOST=0.0.0.0
+      - FIRESTORE_PORT=8310
+      - PROJECT_ID=firestore-emulator
+    ports:
+      - "8310:8310"

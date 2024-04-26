@@ -1,12 +1,14 @@
 <?php
 
-namespace VendorName\Skeleton;
+declare(strict_types=1);
 
+namespace RichanFongdasen\Firestore;
+
+use RichanFongdasen\Firestore\Commands\FirestoreLaravelCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class FirestoreLaravelServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {
@@ -16,10 +18,10 @@ class SkeletonServiceProvider extends PackageServiceProvider
          * More info: https://github.com/spatie/laravel-package-tools
          */
         $package
-            ->name('skeleton')
+            ->name('firestore-laravel')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_skeleton_table')
-            ->hasCommand(SkeletonCommand::class);
+            ->hasMigration('create_firestore-laravel_table')
+            ->hasCommand(FirestoreLaravelCommand::class);
     }
 }
