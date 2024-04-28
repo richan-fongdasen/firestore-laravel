@@ -7,6 +7,8 @@ on:
       - "phpstan-baseline.neon"
       - "phpstan.neon.dist"
       - ".github/workflows/phpstan.yml"
+  pull_request:
+    branches: [main]
 
 jobs:
   phpstan:
@@ -20,7 +22,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, grpc, exif, iconv, imagick, fileinfo
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, grpc, exif, iconv, imagick, fileinfo, protobuf
           coverage: none
 
       - name: Install composer dependencies

@@ -35,4 +35,9 @@
             <directory suffix=".php">./src</directory>
         </include>
     </source>
+    <php>
+        <env name="CACHE_PREFIX" value=""/>
+        <env name="FIRESTORE_EMULATOR_HOST" value="localhost:8310"/>
+        <env name="GOOGLE_CLOUD_PROJECT" value="firestore-emulator"/>
+    </php>
 </phpunit>

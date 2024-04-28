@@ -1,19 +1,22 @@
-# This is my package firestore-laravel
+# A Google Cloud Firestore driver for Laravel Cache and Session
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/richan-fongdasen/firestore-laravel.svg?style=flat-square)](https://packagist.org/packages/richan-fongdasen/firestore-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/richan-fongdasen/firestore-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/richan-fongdasen/firestore-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/richan-fongdasen/firestore-laravel/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/richan-fongdasen/firestore-laravel/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![License: MIT](https://poser.pugx.org/richan-fongdasen/firestore-laravel/license.svg)](https://opensource.org/licenses/MIT)
+[![PHPStan](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/phpstan.yml/badge.svg?branch=main)](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/phpstan.yml)
+[![Test](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/test.yml)
+[![Coding Style](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/coding-style.yml/badge.svg?branch=main)](https://github.com/richan-fongdasen/firestore-laravel/actions/workflows/coding-style.yml)
+[![codecov](https://codecov.io/gh/richan-fongdasen/firestore-laravel/graph/badge.svg?token=RjW6ewweRy)](https://codecov.io/gh/richan-fongdasen/firestore-laravel)
 [![Total Downloads](https://img.shields.io/packagist/dt/richan-fongdasen/firestore-laravel.svg?style=flat-square)](https://packagist.org/packages/richan-fongdasen/firestore-laravel)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package allows you to use Google Cloud Firestore as a driver for Cache and Session store in Laravel application. This package is built on top of the official [Google Cloud Firestore PHP client library](https://github.com/googleapis/google-cloud-php-firestore).
 
-## Support us
+## Requirements
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/firestore-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/firestore-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+-   PHP 8.2 or higher
+-   Laravel 10.0 or higher
+-   PHP Extension: `grpc`
+-   PHP Extension: `protobuf`
+-   Google Cloud Firestore Credentials
 
 ## Installation
 
@@ -21,13 +24,6 @@ You can install the package via composer:
 
 ```bash
 composer require richan-fongdasen/firestore-laravel
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="firestore-laravel-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -40,20 +36,78 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'project_id'  => env('GOOGLE_CLOUD_PROJECT'),
+    'credentials' => env('GOOGLE_APPLICATION_CREDENTIALS'),
+    'database'    => env('FIRESTORE_DATABASE', '(default)'),
+
+    'cache' => [
+        'collection'           => env('FIRESTORE_CACHE_COLLECTION', 'cache'),
+        'key_attribute'        => env('FIRESTORE_CACHE_KEY_ATTR', 'key'),
+        'value_attribute'      => env('FIRESTORE_CACHE_VALUE_ATTR', 'value'),
+        'expiration_attribute' => env('FIRESTORE_CACHE_EXPIRATION_ATTR', 'expired_at'),
+    ],
+
+    'session' => [
+        'collection' => env('FIRESTORE_SESSION_COLLECTION', 'sessions'),
+    ],
 ];
 ```
 
-Optionally, you can publish the views using
+## Configuration
+
+### Setting Up Firestore Authentication
+
+Please see the [Authentication guide](https://github.com/googleapis/google-cloud-php/blob/main/AUTHENTICATION.md) for more information on authenticating your Google Cloud Firestore client.
+
+### Package Configuration
+
+You can configure the package by setting the following environment variables in your `.env` file.
 
 ```bash
-php artisan vendor:publish --tag="firestore-laravel-views"
+GOOGLE_CLOUD_PROJECT=your-google-cloud-project-id
+GOOGLE_APPLICATION_CREDENTIALS="/path-to/your-service-account.json"
+FIRESTORE_DATABASE="(default)"
+FIRESTORE_CACHE_COLLECTION=cache
+FIRESTORE_CACHE_KEY_ATTR=key
+FIRESTORE_CACHE_VALUE_ATTR=value
+FIRESTORE_CACHE_EXPIRATION_ATTR=expired_at
+FIRESTORE_SESSION_COLLECTION=sessions
+```
+
+### Cache Store Configuration
+
+In order to use Firestore as a cache store, you need to append the following configuration into the `config/cache.php` file.
+
+```php
+'stores' => [
+    'firestore' => [
+        'driver' => 'firestore',
+    ],
+],
+```
+
+### Session Driver Configuration
+
+In order to use Firestore as a session store, you need to modify the `SESSION_DRIVER` environment variable in your `.env` file.
+
+```bash
+SESSION_DRIVER=firestore
 ```
 
 ## Usage
 
+There is no special usage for this package. You can use the Cache and Session store as you normally do in Laravel.
+
 ```php
-$firestoreLaravel = new RichanFongdasen\FirestoreLaravel();
-echo $firestoreLaravel->echoPhrase('Hello, RichanFongdasen!');
+// Cache store
+Cache::put('key', 'value', 60); // Store a value in the cache for 60 seconds
+
+$value = Cache::get('key'); // Retrieve a value from the cache
+
+// Session
+session(['key' => 'value']); // Store a value in the session
+
+$value = session('key'); // Retrieve a value from the session
 ```
 
 ## Testing

@@ -22,10 +22,12 @@
     "require": {
         "php": "^8.2",
         "ext-grpc": "*",
-        "google/cloud-firestore": "^1.43",
+        "ext-protobuf": "*",
+        "google/cloud-firestore": "^1.43.1",
         "illuminate/cache": "^10.0||^11.0",
         "illuminate/contracts": "^10.0||^11.0",
         "illuminate/session": "^10.0||^11.0",
+        "illuminate/support": "^10.0||^11.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
@@ -43,8 +45,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RichanFongdasen\\Firestore\\": "src/",
-            "RichanFongdasen\\Firestore\\Database\\Factories\\": "database/factories/"
+            "RichanFongdasen\\Firestore\\": "src/"
         }
     },
     "autoload-dev": {
@@ -82,10 +83,7 @@
         "laravel": {
             "providers": [
                 "RichanFongdasen\\Firestore\\FirestoreLaravelServiceProvider"
-            ],
-            "aliases": {
-                "Firestore": "RichanFongdasen\\Firestore\\Facades\\Firestore"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",

@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\Firestore\Tests;
 
+use Illuminate\Cache\CacheServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 use RichanFongdasen\Firestore\FirestoreLaravelServiceProvider;
@@ -20,6 +21,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
+            CacheServiceProvider::class,
             FirestoreLaravelServiceProvider::class,
         ];
     }
@@ -27,6 +29,9 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
+        config()->set('cache.stores.firestore', [
+            'driver'     => 'firestore',
+        ]);
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_firestore-laravel_table.php.stub';
