@@ -149,7 +149,9 @@ class FirestoreStore implements Store
             return true;
         }
 
-        $bulkWriter = $this->firestore->bulkWriter();
+        $bulkWriter = $this->firestore->bulkWriter([
+            'isThrottlingEnabled' => true,
+        ]);
         $expiration = $this->toTimestamp($seconds);
 
         collect($values)->each(function ($value, $key) use ($bulkWriter, $expiration) {
