@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Google\Cloud\Core\Timestamp;
 use Google\Cloud\Firestore\FirestoreClient;
 use RichanFongdasen\Firestore\Cache\FirestoreStore;
 
@@ -22,13 +23,13 @@ beforeEach(function () {
     $this->firestore->collection('cache')->document('prefix_first-test-key')->set([
         'key'        => 'prefix_first-test-key',
         'value'      => serialize('first test value'),
-        'expired_at' => now()->addHours(4)->getTimestamp(),
+        'expired_at' => new Timestamp(now()->addHours(4)),
     ]);
 
     $this->firestore->collection('cache')->document('prefix_second-test-key')->set([
         'key'        => 'prefix_second-test-key',
         'value'      => serialize('second test value'),
-        'expired_at' => now()->addHours(5)->getTimestamp(),
+        'expired_at' => new Timestamp(now()->addHours(5)),
     ]);
 });
 

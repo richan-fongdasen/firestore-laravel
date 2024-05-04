@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace RichanFongdasen\Firestore\Cache;
 
 use DateTimeInterface;
+use Google\Cloud\Core\Timestamp;
 use Google\Cloud\Firestore\FieldValue;
 use Google\Cloud\Firestore\FirestoreClient;
 use Illuminate\Contracts\Cache\Store;
@@ -109,8 +110,14 @@ class FirestoreStore implements Store
             $expiration = Carbon::now();
         }
 
-        return isset($item[$this->expirationAttribute]) &&
-            $expiration->getTimestamp() >= (int) $item[$this->expirationAttribute];
+        $value = data_get($item, $this->expirationAttribute);
+
+        // If the expiration attribute is not set or not an instance of Timestamp, then consider it as expired.
+        if (! ($value instanceof Timestamp)) {
+            return true;
+        }
+
+        return $expiration->getTimestamp() >= $value->get()->getTimestamp();
     }
 
     /**
@@ -283,11 +290,11 @@ class FirestoreStore implements Store
     /**
      * Get the UNIX timestamp for the given number of seconds.
      */
-    protected function toTimestamp(int $seconds): int
+    protected function toTimestamp(int $seconds): Timestamp
     {
         return $seconds > 0
-            ? $this->availableAt($seconds)
-            : $this->currentTime();
+            ? new Timestamp(Carbon::now()->addSeconds($seconds))
+            : new Timestamp(Carbon::now());
     }
 
     /**

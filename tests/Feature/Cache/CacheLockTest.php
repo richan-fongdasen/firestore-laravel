@@ -23,7 +23,8 @@ test('it can acquire lock and release lock with firestore', function () {
         ->and($document->id())->toBe('test-lock-key')
         ->and($document->data()['key'])->toBe('test-lock-key')
         ->and($document->data()['value'])->toBe(serialize($lock->owner()))
-        ->and($document->data()['expired_at'])->toBeGreaterThan(now()->addSeconds(9)->getTimestamp());
+        ->and($document->data()['expired_at'])->toBeInstanceOf('Google\Cloud\Core\Timestamp')
+        ->and($document->data()['expired_at']->get()->getTimestamp())->toBeGreaterThan(now()->addSeconds(9)->getTimestamp());
 
     $lock->release();
 
@@ -43,7 +44,8 @@ test('the lock can be released by force', function () {
         ->and($document->id())->toBe('test-lock-key')
         ->and($document->data()['key'])->toBe('test-lock-key')
         ->and($document->data()['value'])->toBe(serialize($lock->owner()))
-        ->and($document->data()['expired_at'])->toBeGreaterThan(now()->addSeconds(9)->getTimestamp());
+        ->and($document->data()['expired_at'])->toBeInstanceOf('Google\Cloud\Core\Timestamp')
+        ->and($document->data()['expired_at']->get()->getTimestamp())->toBeGreaterThan(now()->addSeconds(9)->getTimestamp());
 
     $lock->forceRelease();
 
