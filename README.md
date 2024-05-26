@@ -10,6 +10,9 @@
 
 This package allows you to use Google Cloud Firestore as a driver for Cache and Session store in Laravel application. This package is built on top of the official [Google Cloud Firestore PHP client library](https://github.com/googleapis/google-cloud-php-firestore).
 
+> [!WARNING]  
+> This package is not yet compatible with [Laravel Octane](https://github.com/laravel/octane).
+
 ## Requirements
 
 -   PHP 8.2 or higher
