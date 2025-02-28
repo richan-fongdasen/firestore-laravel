@@ -24,8 +24,7 @@ class FirestoreStore implements Store
         protected string $valueAttribute,
         protected string $expirationAttribute,
         protected string $prefix
-    ) {
-    }
+    ) {}
 
     /**
      * Retrieve an item from the cache by key.
