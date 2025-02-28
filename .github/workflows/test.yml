@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "**.php"
-      - ".github/workflows/run-tests.yml"
+      - ".github/workflows/test.yml"
       - "phpunit.xml.dist"
       - "composer.json"
       - "composer.lock"
@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Google Cloud Firestore Emulator
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
